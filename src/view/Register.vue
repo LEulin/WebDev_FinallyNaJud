@@ -150,7 +150,16 @@ export default {
     };
   },
   methods: {
-    validate() {
+    validate: function(e){
+      e.preventDefault();
+       sessionStorage.setItem("Name", this.credentials.name),
+       sessionStorage.setItem("Username", this.credentials.uname),
+       sessionStorage.setItem("Email", this.credentials.email),
+       sessionStorage.setItem("Email", this.credentials.password),
+
+
+        AUTH.register(this.credentials.email, this.credentials.password);
+    
       if (this.$refs.form.validate()) {
         let data = {
           name: this.credentials.name,

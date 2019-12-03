@@ -8,9 +8,9 @@ export default {
         this.user = user
     },
     register(name, uname, adds, email, password, confirmpassword) {
-        if (name == '' || uname == '' || adds == '' || email == '' || password=='' || confirmpassword=='') {
+        if (name == '' || uname == '' || adds == '' || email == '' || password == '' || confirmpassword == '') {
             this.$router.push("/register")
-            // alert("Gwapa")
+                // alert("Gwapa")
         } else {
             this.registeredUser.push({
                 name: name,
