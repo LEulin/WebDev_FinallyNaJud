@@ -155,7 +155,7 @@ export default {
        sessionStorage.setItem("Name", this.credentials.name),
        sessionStorage.setItem("Username", this.credentials.uname),
        sessionStorage.setItem("Email", this.credentials.email),
-       sessionStorage.setItem("Email", this.credentials.password),
+       sessionStorage.setItem("Password", this.credentials.password),
 
 
         AUTH.register(this.credentials.email, this.credentials.password);
@@ -182,4 +182,3 @@ export default {
   }
 };
 </script>
-
