@@ -1,22 +1,22 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
     <template v-slot:activator="{on}">
-      <v-card max-width="600" class="mx-auto">
+      <v-card max-width="800" class="mx-auto">
         <v-row class="mb-6" no-gutters>
           <v-col sm="5" md="6">
-            <v-card class="pa-2" outlined tile>
-              <v-card height="50vh" max-width="50hv">
+            <v-card class="pa-1" >
+              <!-- <v-card height="20vh" max-width="20hv"> -->
                 <center>
-                <v-img :src="img" class="picture" @click="$refs.file.click()" dark></v-img>
-                <input ref="file" type="file" style="display:none" @change="onFileChange()">
+                  <v-img :src="img" class="picture" @click="$refs.file.click()" dark></v-img>
+                  <input ref="file" type="file" style="display:none" @change="onFileChange()">
                 </center>
               </v-card>
-            </v-card>
+            <!-- </v-card> -->
           </v-col>
           <v-col sm="5" offset-sm="2" md="6" offset-md="0">
             <v-card class="pa-2" outlined tile>
               <v-list two-line>
-                <h1 class="name" text-align="center">{{name}} </h1>
+                <h1 class="name" text-align="center">{{name}}</h1>
                 <v-list-item>
                   <v-list-item-icon>
                     <v-icon color="indigo">mdi-account</v-icon>
@@ -53,13 +53,19 @@
                     <v-list-item-subtitle>Password</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
+
+                <v-divider inset></v-divider>
+                <br>
+                <br>
               </v-list>
-               <v-btn class="ma-2" v-on="on"  tile outlined color="success">
-                  <v-icon left>mdi-pencil</v-icon>Edit
-                </v-btn>
-                <v-btn class="ma-2" tile outlined color="error" @click="cancel()">
-                  <v-icon left>mdi-pencil</v-icon>Cancel
-                </v-btn>
+              <v-btn class="ma-2" v-on="on" tile outlined color="success">
+                <v-icon left>mdi-pencil</v-icon>Edit
+              </v-btn>
+              <v-btn class="ma-2" tile outlined color="error" @click="cancel()">
+                <v-icon left>mdi-pencil</v-icon>Cancel
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
             </v-card>
           </v-col>
         </v-row>
@@ -75,10 +81,15 @@
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-text-field label="Username*" v-model="EditUsername" required>{{username}}</v-text-field>
+              <v-text-field label="Name*" v-model="EditName" required></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-text-field label="Password*" v-model="EditPassword" type="password" required>{{password}}</v-text-field>
+              <v-text-field
+                label="Password*"
+                v-model="EditPassword"
+                type="password"
+                required
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -86,15 +97,15 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text  @click="dialog = false" >Close</v-btn>
-        <v-btn color="blue darken-1" text  @click="UpdateAccount()" >Save</v-btn>
+        <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+        <v-btn color="blue darken-1" text @click="UpdateAccount">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <style scoped>
-.name{
+.name {
   text-align: center;
 }
 .picture {
@@ -102,7 +113,7 @@
   width: 50vh;
 }
 .mx-auto {
-  margin-top: 15px;
+  margin-top: 5%;
 }
 #icons {
   margin-top: -650%;
@@ -114,7 +125,6 @@
 </style>
 
 <script>
-import axios from "axios"
 import $ from "jquery";
 export default {
   components: {
@@ -123,36 +133,40 @@ export default {
   data() {
     return {
       img: require("@/assets/back.jpg"),
-      username:this.EditUsername,
-      password: this.EditPassword,
+      name: sessionStorage.getItem("Name"),
+      username: sessionStorage.getItem("Username"),
+      password: sessionStorage.getItem("Password"),
+      email: sessionStorage.getItem("Email"),
       modal: false,
       dialog: false,
-      EditPassword:'',
-      EditUsername:'',
-
+      EditPassword: "",
+      EditName: ""
     };
   },
 
   methods: {
-    UpdateAccount(){
-      var data={
-        username:this.username,
-        password:this.password
-      }
-       axios.post('http://localhost:5000/event/create',data)
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          }); 
+    UpdateAccount: function() {
+      var data = {
+        username: sessionStorage.getItem("Username"),
+        name: this.EditName,
+        password: this.EditPassword
+      };
+      console.log(data)
+      this.$store
+        .dispatch("updateSync", data)
+        .then(response => {
+          if (response) {
+            this.$router.push("dashboard");
+          }
+        })
+        .catch(err => console.log(err));
     },
     onFileChange() {
       this.file = this.$refs.file.files[0];
       this.img = URL.createObjectURL(this.file);
     },
-    cancel(){
-      this.$router.push("dashboard")
+    cancel() {
+      this.$router.push("dashboard");
     },
     onSelect() {
       const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
