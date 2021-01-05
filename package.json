@@ -10,7 +10,7 @@
   "dependencies": {
     "api-js": "0.0.0",
     "auth": "0.0.9",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bootstrap-vue": "^2.1.0",
     "config.js": "^0.1.0",
     "core-js": "^3.3.2",
